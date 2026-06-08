@@ -1,20 +1,7 @@
 import React, { useMemo } from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useInventory } from '../../context/InventoryContext';
 import { getCategoryById } from '../../utils/helpers';
-
-const RADIAN = Math.PI / 180;
-const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-  if (percent < 0.06) return null;
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  return (
-    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={11} fontWeight={600}>
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
 
 export default function DonutChart() {
   const { products, categories } = useInventory();
@@ -45,50 +32,76 @@ export default function DonutChart() {
 
   return (
     <div style={{ position: 'relative' }}>
-      <ResponsiveContainer width="100%" height={240}>
+      {/* Donut Chart — no inline labels to avoid center overlap */}
+      <ResponsiveContainer width="100%" height={220}>
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={65}
+            innerRadius={68}
             outerRadius={100}
             dataKey="value"
             labelLine={false}
-            label={renderCustomLabel}
-            strokeWidth={2}
+            label={false}
+            strokeWidth={2.5}
             stroke="#131620"
+            animationBegin={0}
+            animationDuration={700}
           >
             {data.map((entry, i) => (
               <Cell key={i} fill={entry.color} />
             ))}
           </Pie>
           <Tooltip
-            contentStyle={{ background: '#1e2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }}
+            contentStyle={{
+              background: '#1e2235',
+              border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: 8,
+              fontSize: 12,
+              boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+            }}
             itemStyle={{ color: '#f1f5f9' }}
-            formatter={(value) => [value + ' units', '']}
+            formatter={(value, name) => [
+              `${value} units (${total > 0 ? ((value / total) * 100).toFixed(1) : 0}%)`,
+              name,
+            ]}
           />
         </PieChart>
       </ResponsiveContainer>
-      {/* Center label */}
+
+      {/* Clean center label — no overlap */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
+        position: 'absolute',
+        top: '45%',
+        left: '50%',
         transform: 'translate(-50%, -50%)',
-        textAlign: 'center', pointerEvents: 'none',
+        textAlign: 'center',
+        pointerEvents: 'none',
       }}>
-        <div style={{ fontSize: '1.6rem', fontWeight: 800, lineHeight: 1 }}>{total.toLocaleString()}</div>
-        <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: 2 }}>Total Units</div>
+        <div style={{ fontSize: '1.65rem', fontWeight: 800, lineHeight: 1, color: 'var(--text-primary)' }}>
+          {total.toLocaleString()}
+        </div>
+        <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: 3, letterSpacing: '0.04em' }}>
+          Total Units
+        </div>
       </div>
 
-      {/* Legend */}
+      {/* Legend with percentage shown per item */}
       <div className="chart-legend">
-        {data.map((d, i) => (
-          <div key={i} className="legend-item">
-            <span className="legend-dot" style={{ background: d.color }} />
-            <span className="legend-label">{d.name}</span>
-            <span className="legend-value">{d.value}</span>
-          </div>
-        ))}
+        {data.map((d, i) => {
+          const pct = total > 0 ? ((d.value / total) * 100).toFixed(1) : 0;
+          return (
+            <div key={i} className="legend-item">
+              <span className="legend-dot" style={{ background: d.color }} />
+              <span className="legend-label">{d.name}</span>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginRight: 6 }}>
+                {pct}%
+              </span>
+              <span className="legend-value">{d.value}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

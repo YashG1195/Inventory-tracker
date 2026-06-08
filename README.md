@@ -8,6 +8,9 @@
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?style=for-the-badge&logo=vite&logoColor=white)
 ![React Router](https://img.shields.io/badge/React_Router-v6-ca4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 ![Recharts](https://img.shields.io/badge/Recharts-2-22b5bf?style=for-the-badge)
+![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)
+
+### 🔗 [Live Demo → https://yashg1195.github.io/Inventory-tracker/](https://yashg1195.github.io/Inventory-tracker/)
 
 </div>
 

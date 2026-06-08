@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { InventoryProvider } from './context/InventoryContext';
 import Sidebar from './components/layout/Sidebar';
 import Topbar from './components/layout/Topbar';
@@ -16,7 +16,7 @@ export default function App() {
 
   return (
     <InventoryProvider>
-      <BrowserRouter>
+      <HashRouter>
         <div className="app-shell">
           <Sidebar
             collapsed={sidebarCollapsed}
@@ -38,7 +38,7 @@ export default function App() {
           </div>
         </div>
         <ToastContainer />
-      </BrowserRouter>
+      </HashRouter>
     </InventoryProvider>
   );
 }

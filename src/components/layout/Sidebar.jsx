@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useInventory } from '../../context/InventoryContext';
+import { useAuth } from '../../context/AuthContext';
 import { getStatus } from '../../utils/helpers';
 
 const navItems = [
@@ -13,14 +14,24 @@ const navItems = [
 ];
 
 export default function Sidebar({ collapsed, onToggle }) {
-  const { products } = useInventory();
-  const alertCount = products.filter(p => getStatus(p) !== 'in-stock').length;
+  const { products }       = useInventory();
+  const { currentUser, logout } = useAuth();
+  const navigate           = useNavigate();
+  const alertCount         = products.filter(p => getStatus(p) !== 'in-stock').length;
+
+  function handleLogout() {
+    logout();
+    navigate('/login');
+  }
 
   return (
     <aside className={`sidebar${collapsed ? ' collapsed' : ''}`}>
       <div className="sidebar-logo">
         <div className="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/>
+            <rect x="2" y="14" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/>
+          </svg>
         </div>
         {!collapsed && <span className="logo-text">StockSense</span>}
       </div>
@@ -60,14 +71,24 @@ export default function Sidebar({ collapsed, onToggle }) {
         ))}
       </nav>
 
+      {/* ── User profile + logout ─────────────────────────────────── */}
       <div className="sidebar-footer">
-        <div className="user-avatar">Y</div>
+        <div className="user-avatar" title={currentUser?.name}>
+          {currentUser?.name?.[0]?.toUpperCase() || 'U'}
+        </div>
         {!collapsed && (
-          <div className="user-info">
-            <div className="user-name">Yash Admin</div>
-            <div className="user-role">Inventory Manager</div>
+          <div className="user-info" style={{ flex: 1, minWidth: 0 }}>
+            <div className="user-name">{currentUser?.name || 'User'}</div>
+            <div className="user-role">{currentUser?.email || ''}</div>
           </div>
         )}
+        <button className="logout-btn" onClick={handleLogout} title="Sign out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
       </div>
     </aside>
   );

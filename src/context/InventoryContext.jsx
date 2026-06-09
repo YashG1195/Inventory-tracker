@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import { DEFAULT_CATEGORIES, DEMO_PRODUCTS } from '../data/defaults';
 import { uid } from '../utils/helpers';
+import { useAuth } from './AuthContext';
 
 // ─── Initial State ────────────────────────────────────────────────────────────
-function loadInitial() {
+function loadInitial(userId) {
   try {
     return {
-      products:   JSON.parse(localStorage.getItem('ss_products'))   || [...DEMO_PRODUCTS],
-      categories: JSON.parse(localStorage.getItem('ss_categories')) || [...DEFAULT_CATEGORIES],
-      activity:   JSON.parse(localStorage.getItem('ss_activity'))   || [],
+      products:   JSON.parse(localStorage.getItem(`ss_products_${userId}`))   || [...DEMO_PRODUCTS],
+      categories: JSON.parse(localStorage.getItem(`ss_categories_${userId}`)) || [...DEFAULT_CATEGORIES],
+      activity:   JSON.parse(localStorage.getItem(`ss_activity_${userId}`))   || [],
       toasts:     [],
     };
   } catch {
@@ -74,14 +75,17 @@ function reducer(state, action) {
 const InventoryContext = createContext(null);
 
 export function InventoryProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, null, loadInitial);
+  const { currentUser } = useAuth();
+  const userId = currentUser?.id || 'guest';
 
-  // Sync to localStorage whenever products/categories/activity change
+  const [state, dispatch] = useReducer(reducer, null, () => loadInitial(userId));
+
+  // Sync to localStorage keyed by userId — each user has isolated data
   useEffect(() => {
-    localStorage.setItem('ss_products',   JSON.stringify(state.products));
-    localStorage.setItem('ss_categories', JSON.stringify(state.categories));
-    localStorage.setItem('ss_activity',   JSON.stringify(state.activity));
-  }, [state.products, state.categories, state.activity]);
+    localStorage.setItem(`ss_products_${userId}`,   JSON.stringify(state.products));
+    localStorage.setItem(`ss_categories_${userId}`, JSON.stringify(state.categories));
+    localStorage.setItem(`ss_activity_${userId}`,   JSON.stringify(state.activity));
+  }, [state.products, state.categories, state.activity, userId]);
 
   // ── Actions ────────────────────────────────────────────────────────────────
   const addProduct = useCallback((data) => {

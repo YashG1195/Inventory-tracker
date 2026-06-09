@@ -8,9 +8,9 @@
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?style=for-the-badge&logo=vite&logoColor=white)
 ![React Router](https://img.shields.io/badge/React_Router-v6-ca4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 ![Recharts](https://img.shields.io/badge/Recharts-2-22b5bf?style=for-the-badge)
-![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)
+![Netlify](https://img.shields.io/badge/Live%20Demo-Netlify-00c7b7?style=for-the-badge&logo=netlify&logoColor=white)
 
-### 🔗 [Live Demo → https://yashg1195.github.io/Inventory-tracker/](https://yashg1195.github.io/Inventory-tracker/)
+### 🔗 [Live Demo → https://stocksenseims.netlify.app](https://stocksenseims.netlify.app)
 
 </div>
 
@@ -53,6 +53,7 @@ Then navigate to **http://localhost:5173** in your browser.
 | 🔔 **Alerts** | Auto-detects low-stock & out-of-stock products with one-click restock |
 | 📈 **Reports** | Total value, category breakdown, top products, CSV export |
 | 🏷️ **Categories** | Add/delete custom categories with color picker & emoji |
+| 🔐 **User Auth** | Register/Login system with per-user isolated data and session persistence |
 | 🔄 **Real-time State** | Every action instantly reflects across all pages (no page reload) |
 | 💾 **Persistence** | All data saved to `localStorage` — survives browser refresh |
 
@@ -108,6 +109,7 @@ inventory_tracker/
     ├── App.jsx                         ← Router + Layout shell
     ├── index.css                       ← Dark theme design system
     ├── context/
+    │   ├── AuthContext.jsx             ← Auth state (register, login, logout)
     │   └── InventoryContext.jsx        ← Global state (useReducer + localStorage)
     ├── data/
     │   └── defaults.js                 ← Demo products & default categories
@@ -120,11 +122,14 @@ inventory_tracker/
     │   ├── ui/
     │   │   ├── Modal.jsx               ← Reusable modal (Escape key support)
     │   │   ├── Toast.jsx               ← Auto-dismiss toast notifications
-    │   │   └── StatusBadge.jsx         ← In Stock / Low Stock / Out of Stock
+    │   │   ├── StatusBadge.jsx         ← In Stock / Low Stock / Out of Stock
+    │   │   └── ProtectedRoute.jsx      ← Auth guard, redirects to /login
     │   └── charts/
     │       ├── DonutChart.jsx          ← Recharts PieChart (category distribution)
     │       └── StockBarChart.jsx       ← Recharts BarChart (stock levels)
     └── pages/
+        ├── Login.jsx                   ← Auth login page (split panel design)
+        ├── Register.jsx                ← Auth register with password strength bar
         ├── Dashboard.jsx
         ├── Inventory.jsx
         ├── AddProduct.jsx              ← Handles both /add and /edit/:id
@@ -151,13 +156,15 @@ inventory_tracker/
 
 ## 📋 How to Use
 
-1. **Dashboard** — View live stats, charts, and recent activity
-2. **Inventory** → **Add Product** — Fill the form to add new stock items
-3. **Inventory** → 🔄 button — Update stock quantity (Set / Add / Remove)
-4. **Inventory** → ✏️ button — Edit product details
-5. **Alerts** — See all low/out-of-stock items and restock instantly
-6. **Reports** → **Export CSV** — Download full inventory as a spreadsheet
-7. **Categories** — Add custom categories with color and emoji
+1. **Register** — Create a free account at `/register`
+2. **Login** — Sign in at `/login` with your credentials
+3. **Dashboard** — View live stats, charts, and recent activity
+4. **Inventory** → **Add Product** — Fill the form to add new stock items
+5. **Inventory** → 🔄 button — Update stock quantity (Set / Add / Remove)
+6. **Inventory** → ✏️ button — Edit product details
+7. **Alerts** — See all low/out-of-stock items and restock instantly
+8. **Reports** → **Export CSV** — Download full inventory as a spreadsheet
+9. **Categories** — Add custom categories with color and emoji
 
 ---
 

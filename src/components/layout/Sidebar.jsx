@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { getStatus } from '../../utils/helpers';
 
 const navItems = [
-  { path: '/',           label: 'Dashboard',   icon: (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>) },
+  { path: '/dashboard',  label: 'Dashboard',   icon: (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>) },
   { path: '/inventory',  label: 'Inventory',   icon: (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>) },
   { path: '/add',        label: 'Add Product', icon: (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>) },
   { path: '/alerts',     label: 'Alerts',      icon: (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>), hasBadge: true },
@@ -42,7 +42,7 @@ export default function Sidebar({ collapsed, onToggle }) {
           <NavLink
             key={item.path}
             to={item.path}
-            end={item.path === '/'}
+            end={item.path === '/dashboard'}
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
             title={collapsed ? item.label : undefined}
           >
